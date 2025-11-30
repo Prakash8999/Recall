@@ -4,16 +4,18 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { KanbanBoard } from "@/components/kanban/Board";
 import { Button } from "@/components/ui/button";
-import { Plus, LogOut, LayoutDashboard } from "lucide-react";
+import { Plus, LogOut, LayoutDashboard, ShieldAlert } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { NewTaskModal } from "@/components/kanban/NewTaskModal";
 import { ProfileModal } from "@/components/ProfileModal";
 import { toast } from "sonner";
+import { AuthModal } from "@/components/AuthModal";
 
 export default function Dashboard() {
   const { signOut, user } = useAuth();
   const tasks = useQuery(api.tasks.list);
   const [isNewTaskOpen, setIsNewTaskOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   if (tasks === undefined || user === undefined) {
     return (
@@ -21,6 +23,30 @@ export default function Dashboard() {
         <div className="animate-pulse flex flex-col items-center">
           <div className="h-12 w-12 bg-muted rounded-full mb-4"></div>
           <div className="h-4 w-32 bg-muted rounded"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (user === null) return null;
+
+  // Block access if not verified
+  if (!user.emailVerificationTime) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background p-4">
+        <div className="max-w-md w-full text-center space-y-4">
+          <div className="bg-yellow-500/10 p-4 rounded-full w-16 h-16 mx-auto flex items-center justify-center">
+            <ShieldAlert className="w-8 h-8 text-yellow-600" />
+          </div>
+          <h1 className="text-2xl font-bold">Verification Required</h1>
+          <p className="text-muted-foreground">
+            Please verify your email address to access your dashboard.
+          </p>
+          <div className="flex gap-2 justify-center">
+            <Button variant="outline" onClick={() => signOut()}>Sign Out</Button>
+            <Button onClick={() => setIsAuthModalOpen(true)}>Enter Code</Button>
+          </div>
+          <AuthModal open={isAuthModalOpen} onOpenChange={setIsAuthModalOpen} />
         </div>
       </div>
     );

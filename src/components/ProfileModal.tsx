@@ -92,10 +92,8 @@ export function ProfileModal({ user }: ProfileModalProps) {
                 </div>
               </div>
               <Switch
-                checked={user.otpEnabled !== false} // Default to true if undefined
+                checked={user.otpEnabled === true}
                 onCheckedChange={handleOtpToggle}
-                disabled // Disabled because we can't change the auth provider dynamically in this setup
-                title="This feature is managed by the system administrator"
               />
             </div>
           </div>

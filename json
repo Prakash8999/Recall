@@ -1,0 +1,3 @@
+{
+  "plan": "1. Verify the OTP flow by testing sign up and sign in.\n2. Ensure the 'Email already exists' error is handled correctly by the AuthModal.\n3. Check if the 'Send OTP on login' toggle in ProfileModal works as expected (it is currently disabled in the UI, might need enabling).\n4. Polish any UI rough edges."
+}
