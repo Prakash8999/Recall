@@ -1,5 +1,6 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
-import { query, QueryCtx } from "./_generated/server";
+import { query, mutation, QueryCtx } from "./_generated/server";
+import { v } from "convex/values";
 
 /**
  * Get the current signed in user. Returns null if the user is not signed in.
@@ -31,3 +32,20 @@ export const getCurrentUser = async (ctx: QueryCtx) => {
   }
   return await ctx.db.get(userId);
 };
+
+export const update = mutation({
+  args: {
+    name: v.optional(v.string()),
+    otpEnabled: v.optional(v.boolean()),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Unauthorized");
+
+    const updates: any = {};
+    if (args.name !== undefined) updates.name = args.name;
+    if (args.otpEnabled !== undefined) updates.otpEnabled = args.otpEnabled;
+
+    await ctx.db.patch(userId, updates);
+  },
+});

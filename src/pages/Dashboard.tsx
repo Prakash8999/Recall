@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, LogOut, LayoutDashboard } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { NewTaskModal } from "@/components/kanban/NewTaskModal";
+import { ProfileModal } from "@/components/ProfileModal";
 import { toast } from "sonner";
 
 export default function Dashboard() {
@@ -14,7 +15,7 @@ export default function Dashboard() {
   const tasks = useQuery(api.tasks.list);
   const [isNewTaskOpen, setIsNewTaskOpen] = useState(false);
 
-  if (tasks === undefined) {
+  if (tasks === undefined || user === undefined) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-pulse flex flex-col items-center">
@@ -43,9 +44,7 @@ export default function Dashboard() {
             <Plus className="w-4 h-4" />
             New Task
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => signOut()} title="Sign Out">
-            <LogOut className="w-5 h-5 text-muted-foreground" />
-          </Button>
+          {user && <ProfileModal user={user} />}
         </div>
       </header>
 
