@@ -261,3 +261,11 @@ When using convex, make sure:
 - This includes importing generated files like `@/convex/_generated/server`, `@/convex/_generated/api`
 - Remember to import functions like useQuery, useMutation, useAction, etc. from `convex/react`
 - NEVER have return type validators.
+
+## Local Development Setup
+
+To run this project locally on your machine:
+
+1.  **Clone the repository**
+2.  **Install dependencies**:
+    
