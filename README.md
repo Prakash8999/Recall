@@ -29,6 +29,12 @@ The convex server has a separate set of environment variables that are accessibl
 
 Currently, these variables include auth-specific keys: JWKS, JWT_PRIVATE_KEY, and SITE_URL.
 
+### AI Configuration
+
+To enable the AI features (Task Breakdown, Unblocking Tips, Description Generation), you must set the following environment variable in the **Frontend** API Keys settings:
+
+- `VITE_GEMINI_API_KEY`: Your Google Gemini API Key. You can obtain one from [Google AI Studio](https://aistudio.google.com/app/apikey).
+
 
 # Using Authentication (Important!)
 
