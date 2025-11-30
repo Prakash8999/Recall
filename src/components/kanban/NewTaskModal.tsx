@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation } from "convex/react";
+import { useMutation, useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import {
   Dialog,
@@ -15,7 +15,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2, Sparkles } from "lucide-react";
-import { callGemini } from "@/lib/ai";
 
 interface NewTaskModalProps {
   open: boolean;
@@ -24,6 +23,7 @@ interface NewTaskModalProps {
 
 export function NewTaskModal({ open, onOpenChange }: NewTaskModalProps) {
   const createTask = useMutation(api.tasks.create);
+  const performAi = useAction(api.ai.chat);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +37,7 @@ export function NewTaskModal({ open, onOpenChange }: NewTaskModalProps) {
     setIsAiLoading(true);
     try {
       const prompt = `Write a clear, professional description for a task titled: "${title}". Keep it concise (under 2 sentences).`;
-      const text = await callGemini(prompt, false);
+      const text = await performAi({ prompt, asJson: false });
       setDescription(text);
       toast.success("Description generated!");
     } catch (error: any) {

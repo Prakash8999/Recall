@@ -1,5 +1,5 @@
 import { Doc, Id } from "@/convex/_generated/dataModel";
-import { useMutation } from "convex/react";
+import { useMutation, useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,7 +8,6 @@ import { Trash2, AlertCircle, Clock, CheckCircle2, Sparkles, BrainCircuit, MoreV
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 import { motion } from "framer-motion";
-import { callGemini } from "@/lib/ai";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { EditTaskModal } from "./EditTaskModal";
@@ -27,6 +26,7 @@ interface TaskCardProps {
 export function TaskCard({ task, onDragStart }: TaskCardProps) {
   const removeTask = useMutation(api.tasks.remove);
   const createTask = useMutation(api.tasks.create);
+  const performAi = useAction(api.ai.chat);
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
 
@@ -47,7 +47,7 @@ export function TaskCard({ task, onDragStart }: TaskCardProps) {
     setIsAiLoading(true);
     try {
       const prompt = `Break down the task "${task.title}" into 3 actionable sub-tasks. Return JSON: { "subtasks": ["Task 1", "Task 2"] }`;
-      const result = await callGemini(prompt, true);
+      const result = await performAi({ prompt, asJson: true });
       const subtasks = result.subtasks || [];
 
       if (subtasks.length > 0) {
@@ -76,7 +76,7 @@ export function TaskCard({ task, onDragStart }: TaskCardProps) {
     setIsAiLoading(true);
     try {
       const prompt = `My task "${task.title}" is blocked because: "${task.blockedReason}". Give me 3 short, strategic tips to unblock it. Return JSON: { "tips": ["Tip 1", "Tip 2", "Tip 3"] }`;
-      const result = await callGemini(prompt, true);
+      const result = await performAi({ prompt, asJson: true });
       const tips = result.tips || [];
       
       if (tips.length > 0) {
