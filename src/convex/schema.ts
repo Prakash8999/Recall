@@ -44,6 +44,7 @@ const schema = defineSchema(
       ),
       blockedReason: v.optional(v.union(v.string(), v.null())),
       completedAt: v.optional(v.union(v.number(), v.null())),
+      updatedAt: v.optional(v.number()),
     }).index("by_user", ["userId"]),
   },
   {

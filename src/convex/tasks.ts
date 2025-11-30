@@ -35,6 +35,7 @@ export const create = mutation({
       title: args.title,
       description: args.description,
       status: args.status,
+      updatedAt: Date.now(),
     });
   },
 });
@@ -70,7 +71,7 @@ export const updateStatus = mutation({
       }
     }
 
-    const updates: any = { status: args.status };
+    const updates: any = { status: args.status, updatedAt: Date.now() };
     
     if (args.status === "done") {
       updates.completedAt = Date.now();
@@ -104,6 +105,7 @@ export const update = mutation({
     await ctx.db.patch(args.taskId, {
       title: args.title,
       description: args.description,
+      updatedAt: Date.now(),
     });
   },
 });

@@ -179,16 +179,24 @@ export function TaskCard({ task, onDragStart }: TaskCardProps) {
                </Button>
             )}
 
-            <div className="flex items-center justify-between mt-2 text-[10px] text-muted-foreground">
-              <div className="flex items-center gap-1">
-                <Clock className="w-3 h-3" />
-                {formatDistanceToNow(task._creationTime, { addSuffix: true })}
+            <div className="flex flex-col gap-1 mt-3 pt-2 border-t border-border/50">
+              <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+                <div className="flex items-center gap-1" title="Created at">
+                  <Clock className="w-3 h-3" />
+                  <span>Created {formatDistanceToNow(task._creationTime, { addSuffix: true })}</span>
+                </div>
+                {task.status === "done" && (
+                  <Badge variant="secondary" className="h-5 px-1.5 text-[10px] bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 hover:bg-green-100">
+                    <CheckCircle2 className="w-3 h-3 mr-1" />
+                    Done
+                  </Badge>
+                )}
               </div>
-              {task.status === "done" && (
-                <Badge variant="secondary" className="h-5 px-1.5 text-[10px] bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 hover:bg-green-100">
-                  <CheckCircle2 className="w-3 h-3 mr-1" />
-                  Done
-                </Badge>
+              {task.updatedAt && (
+                <div className="flex items-center gap-1 text-[10px] text-muted-foreground/70" title="Last updated">
+                  <Clock className="w-3 h-3" />
+                  <span>Updated {formatDistanceToNow(task.updatedAt, { addSuffix: true })}</span>
+                </div>
               )}
             </div>
           </CardContent>
