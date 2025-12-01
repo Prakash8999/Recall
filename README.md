@@ -267,5 +267,4 @@ When using convex, make sure:
 To run this project locally on your machine:
 
 1.  **Clone the repository**
-2.  **Install dependencies**:
     
