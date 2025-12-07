@@ -61,9 +61,15 @@ export function NewTaskModal({ open, onOpenChange }: NewTaskModalProps) {
     }
     setIsAiLoading(true);
     try {
-      const systemPrompt = "You are a professional editor. Rewrite the following text to improve grammar, clarity, and professional tone. Keep the meaning the same. Return ONLY the improved text without any explanations or prefixes.";
+      const systemPrompt = "You are a professional editor. Rewrite the input text to improve grammar, clarity, and professional tone. Return ONLY the improved text. Do not add any prefixes like '(Improved)' or suffixes like 'Corrected for...'. Do not add quotes. Do not add conversational filler.";
       const result = await callAi(description, systemPrompt);
-      setDescription(result);
+      
+      // Clean up the result just in case the AI is chatty
+      let cleanedResult = result.trim();
+      cleanedResult = cleanedResult.replace(/^\(Improved\)\s*/i, "").replace(/^Improved:\s*/i, "");
+      cleanedResult = cleanedResult.replace(/\s*-\s*Corrected for grammar and clarity\.?$/i, "");
+      
+      setDescription(cleanedResult);
       toast.success("Description improved!");
     } catch (error: any) {
       if (error.message.includes("Missing API Key")) {

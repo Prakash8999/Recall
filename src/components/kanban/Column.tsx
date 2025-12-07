@@ -64,7 +64,7 @@ export function KanbanColumn({ id, label, color, tasks, onDragStart, onDrop }: K
         </span>
       </div>
       
-      <div className="flex-1 p-2 space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-muted-foreground/10 hover:scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent">
+      <div className="flex-1 min-h-0 p-2 space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-muted-foreground/10 hover:scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent">
         {tasks.map((task) => (
           <TaskCard key={task._id} task={task} onDragStart={onDragStart} />
         ))}
