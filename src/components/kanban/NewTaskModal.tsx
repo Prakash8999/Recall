@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2, Sparkles, Wand2 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { useAuth } from "@/hooks/use-auth";
@@ -36,10 +36,28 @@ export function NewTaskModal({ open, onOpenChange }: NewTaskModalProps) {
     }
     setIsAiLoading(true);
     try {
-      // Mock AI for now as we removed Convex AI
+      // Mock AI for now
       await new Promise(resolve => setTimeout(resolve, 1000));
       setDescription(`Professional description for: ${title}. This task involves key steps to ensure successful completion.`);
       toast.success("Description generated!");
+    } catch (error: any) {
+      toast.error("AI Failed", { description: error.message });
+    } finally {
+      setIsAiLoading(false);
+    }
+  };
+
+  const handleAiImprove = async () => {
+    if (!description.trim()) {
+      toast.error("Please enter a description first");
+      return;
+    }
+    setIsAiLoading(true);
+    try {
+      // Mock AI for now
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setDescription((prev) => `(Improved) ${prev} - Corrected for grammar and clarity.`);
+      toast.success("Description improved!");
     } catch (error: any) {
       toast.error("AI Failed", { description: error.message });
     } finally {
@@ -96,17 +114,30 @@ export function NewTaskModal({ open, onOpenChange }: NewTaskModalProps) {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <Label htmlFor="description">Description (Optional)</Label>
-              <Button 
-                type="button" 
-                variant="ghost" 
-                size="sm" 
-                className="h-6 text-xs text-indigo-600"
-                onClick={handleAiDescription}
-                disabled={isAiLoading || !title.trim()}
-              >
-                {isAiLoading ? <Loader2 className="w-3 h-3 animate-spin mr-1"/> : <Sparkles className="w-3 h-3 mr-1"/>}
-                Auto-Write
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-6 text-xs text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
+                  onClick={handleAiDescription}
+                  disabled={isAiLoading || !title.trim()}
+                >
+                  {isAiLoading ? <Loader2 className="w-3 h-3 animate-spin mr-1"/> : <Sparkles className="w-3 h-3 mr-1"/>}
+                  Auto-Write
+                </Button>
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-6 text-xs text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
+                  onClick={handleAiImprove}
+                  disabled={isAiLoading || !description.trim()}
+                >
+                  {isAiLoading ? <Loader2 className="w-3 h-3 animate-spin mr-1"/> : <Wand2 className="w-3 h-3 mr-1"/>}
+                  Improve
+                </Button>
+              </div>
             </div>
             <Textarea
               id="description"

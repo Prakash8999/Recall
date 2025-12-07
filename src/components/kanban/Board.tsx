@@ -111,10 +111,10 @@ export function KanbanBoard({ tasks, selectedDate }: KanbanBoardProps) {
   ];
 
   return (
-    <div className="h-full p-4 md:p-8 overflow-x-auto overflow-y-hidden">
-      <div className="flex h-full gap-6 min-w-full w-max md:w-full snap-x snap-mandatory md:snap-none pb-2">
+    <div className="h-full p-4 md:p-6 overflow-x-auto overflow-y-hidden bg-muted/20">
+      <div className="flex h-full gap-4 md:gap-6 min-w-full w-max pb-4 px-2">
         {columns.map((col) => (
-          <div key={col.id} className="snap-center min-w-[85vw] md:min-w-0 md:flex-1 h-full flex flex-col">
+          <div key={col.id} className="w-[85vw] md:w-[350px] shrink-0 h-full flex flex-col snap-center">
             <KanbanColumn
               id={col.id}
               label={col.label}
