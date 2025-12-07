@@ -16,6 +16,7 @@ import { Loader2, Sparkles, Wand2 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { useAuth } from "@/hooks/use-auth";
+import { callAi } from "@/lib/ai";
 
 interface NewTaskModalProps {
   open: boolean;
@@ -36,12 +37,18 @@ export function NewTaskModal({ open, onOpenChange }: NewTaskModalProps) {
     }
     setIsAiLoading(true);
     try {
-      // Mock AI for now
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setDescription(`Professional description for: ${title}. This task involves key steps to ensure successful completion.`);
+      const systemPrompt = "You are a professional project manager. Write a concise, professional task description based on the task title provided. Include 2-3 bullet points of key steps. Do not include any conversational filler.";
+      const result = await callAi(title, systemPrompt);
+      setDescription(result);
       toast.success("Description generated!");
     } catch (error: any) {
-      toast.error("AI Failed", { description: error.message });
+      if (error.message.includes("Missing API Key")) {
+        toast.error("AI Configuration Missing", { 
+          description: "Please add VITE_PPLX_API_KEY to your .env.local file to use AI features." 
+        });
+      } else {
+        toast.error("AI Failed", { description: error.message });
+      }
     } finally {
       setIsAiLoading(false);
     }
@@ -54,12 +61,18 @@ export function NewTaskModal({ open, onOpenChange }: NewTaskModalProps) {
     }
     setIsAiLoading(true);
     try {
-      // Mock AI for now
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setDescription((prev) => `(Improved) ${prev} - Corrected for grammar and clarity.`);
+      const systemPrompt = "You are a professional editor. Rewrite the following text to improve grammar, clarity, and professional tone. Keep the meaning the same. Return ONLY the improved text without any explanations or prefixes.";
+      const result = await callAi(description, systemPrompt);
+      setDescription(result);
       toast.success("Description improved!");
     } catch (error: any) {
-      toast.error("AI Failed", { description: error.message });
+      if (error.message.includes("Missing API Key")) {
+        toast.error("AI Configuration Missing", { 
+          description: "Please add VITE_PPLX_API_KEY to your .env.local file to use AI features." 
+        });
+      } else {
+        toast.error("AI Failed", { description: error.message });
+      }
     } finally {
       setIsAiLoading(false);
     }

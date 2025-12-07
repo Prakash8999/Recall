@@ -1,3 +1,3 @@
 {
-  "plan": "1. Verify the OTP flow by testing sign up and sign in.\n2. Ensure the 'Email already exists' error is handled correctly by the AuthModal.\n3. Check if the 'Send OTP on login' toggle in ProfileModal works as expected (it is currently disabled in the UI, might need enabling).\n4. Polish any UI rough edges."
+  "plan": "1. Verify the AI integration works by checking if the API key is correctly read and used.\n2. Check the horizontal scrolling on the board to ensure it snaps correctly.\n3. Verify the new column header styling looks good and consistent."
 }

@@ -17,10 +17,10 @@ export function KanbanColumn({ id, label, color, tasks, onDragStart, onDrop }: K
   return (
     <div
       className={cn(
-        "flex-1 flex flex-col rounded-xl border bg-card transition-all duration-300 shadow-sm hover:shadow-md",
-        id === "in_progress" && "border-blue-200/50 dark:border-blue-900/50",
-        id === "blocked" && "border-red-200/50 dark:border-red-900/50",
-        id === "done" && "border-green-200/50 dark:border-green-900/50"
+        "flex-1 flex flex-col rounded-xl border bg-card/50 backdrop-blur-sm transition-all duration-300 shadow-sm hover:shadow-md overflow-hidden",
+        id === "in_progress" && "border-blue-200/50 dark:border-blue-900/50 ring-1 ring-blue-500/5",
+        id === "blocked" && "border-red-200/50 dark:border-red-900/50 ring-1 ring-red-500/5",
+        id === "done" && "border-green-200/50 dark:border-green-900/50 ring-1 ring-green-500/5"
       )}
       onDragOver={(e) => {
         e.preventDefault();
@@ -39,24 +39,27 @@ export function KanbanColumn({ id, label, color, tasks, onDragStart, onDrop }: K
       }}
     >
       <div className={cn(
-        "p-3 flex items-center justify-between border-b",
-        id === "todo" && "bg-secondary/30 border-secondary",
-        id === "in_progress" && "bg-blue-50/50 dark:bg-blue-900/20 border-blue-100 dark:border-blue-900",
-        id === "blocked" && "bg-red-50/50 dark:bg-red-900/20 border-red-100 dark:border-red-900",
-        id === "done" && "bg-green-50/50 dark:bg-green-900/20 border-green-100 dark:border-green-900"
+        "p-4 flex items-center justify-between border-b bg-gradient-to-b from-white/50 to-transparent dark:from-white/5",
+        id === "todo" && "border-secondary",
+        id === "in_progress" && "border-blue-100 dark:border-blue-900/50 bg-blue-50/30 dark:bg-blue-900/10",
+        id === "blocked" && "border-red-100 dark:border-red-900/50 bg-red-50/30 dark:bg-red-900/10",
+        id === "done" && "border-green-100 dark:border-green-900/50 bg-green-50/30 dark:bg-green-900/10"
       )}>
-        <div className="flex items-center gap-2">
-          <div className={cn("w-2 h-2 rounded-full", 
-            id === "todo" && "bg-slate-400",
-            id === "in_progress" && "bg-blue-500",
-            id === "blocked" && "bg-red-500",
-            id === "done" && "bg-green-500"
+        <div className="flex items-center gap-3">
+          <div className={cn("w-3 h-3 rounded-full ring-2 ring-offset-2 ring-offset-card", 
+            id === "todo" && "bg-slate-400 ring-slate-200 dark:ring-slate-800",
+            id === "in_progress" && "bg-blue-500 ring-blue-200 dark:ring-blue-900",
+            id === "blocked" && "bg-red-500 ring-red-200 dark:ring-red-900",
+            id === "done" && "bg-green-500 ring-green-200 dark:ring-green-900"
           )} />
-          <h3 className="font-semibold tracking-tight text-sm text-foreground">
+          <h3 className="font-bold tracking-tight text-sm text-foreground uppercase opacity-90">
             {label}
           </h3>
         </div>
-        <span className="text-[10px] font-medium text-muted-foreground bg-background/80 px-2 py-0.5 rounded-full border shadow-sm">
+        <span className={cn(
+          "text-[10px] font-bold px-2.5 py-1 rounded-full border shadow-sm",
+          "bg-background/80 text-muted-foreground"
+        )}>
           {tasks.length}
         </span>
       </div>
