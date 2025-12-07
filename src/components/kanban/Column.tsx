@@ -17,7 +17,7 @@ export function KanbanColumn({ id, label, color, tasks, onDragStart, onDrop }: K
   return (
     <div
       className={cn(
-        "flex-1 flex flex-col rounded-xl border bg-card/50 backdrop-blur-sm transition-all duration-300 shadow-sm hover:shadow-md overflow-hidden",
+        "flex-1 flex flex-col rounded-xl border bg-card/50 backdrop-blur-sm transition-all duration-300 shadow-sm hover:shadow-md overflow-hidden h-full",
         id === "in_progress" && "border-blue-200/50 dark:border-blue-900/50 ring-1 ring-blue-500/5",
         id === "blocked" && "border-red-200/50 dark:border-red-900/50 ring-1 ring-red-500/5",
         id === "done" && "border-green-200/50 dark:border-green-900/50 ring-1 ring-green-500/5"

@@ -59,19 +59,41 @@ export function NewTaskModal({ open, onOpenChange }: NewTaskModalProps) {
       toast.error("Please enter a description first");
       return;
     }
+    console.log("Improving description:", description);
     setIsAiLoading(true);
     try {
-      const systemPrompt = "You are a professional editor. Rewrite the input text to improve grammar, clarity, and professional tone. Return ONLY the improved text. Do not add any prefixes like '(Improved)' or suffixes like 'Corrected for...'. Do not add quotes. Do not add conversational filler.";
+      const systemPrompt = "You are a professional editor. Rewrite the input text to improve grammar, clarity, and professional tone. Return ONLY the improved text. Do NOT include any conversational filler, prefixes (like 'Improved:'), or suffixes (like 'Corrected for...'). Just the text.";
       const result = await callAi(description, systemPrompt);
       
+      console.log("Raw AI result:", result);
+
       // Clean up the result just in case the AI is chatty
       let cleanedResult = result.trim();
-      cleanedResult = cleanedResult.replace(/^\(Improved\)\s*/i, "").replace(/^Improved:\s*/i, "");
-      cleanedResult = cleanedResult.replace(/\s*-\s*Corrected for grammar and clarity\.?$/i, "");
       
-      setDescription(cleanedResult);
-      toast.success("Description improved!");
+      // Remove common prefixes
+      cleanedResult = cleanedResult.replace(/^Here is the improved text:\s*/i, "");
+      cleanedResult = cleanedResult.replace(/^\(Improved\)\s*/i, "");
+      cleanedResult = cleanedResult.replace(/^Improved:\s*/i, "");
+      
+      // Remove common suffixes (more aggressive)
+      cleanedResult = cleanedResult.replace(/\s*-\s*Corrected for grammar.*$/i, "");
+      cleanedResult = cleanedResult.replace(/\s*Note:.*$/i, "");
+      
+      // Remove quotes if the AI wrapped the whole thing in quotes
+      if (cleanedResult.startsWith('"') && cleanedResult.endsWith('"')) {
+        cleanedResult = cleanedResult.slice(1, -1);
+      }
+
+      console.log("Cleaned result:", cleanedResult);
+      
+      if (cleanedResult === description.trim()) {
+         toast.info("No changes needed", { description: "The AI thinks your description is already great!" });
+      } else {
+         setDescription(cleanedResult);
+         toast.success("Description improved!");
+      }
     } catch (error: any) {
+      console.error("AI Improve Error:", error);
       if (error.message.includes("Missing API Key")) {
         toast.error("AI Configuration Missing", { 
           description: "Please add VITE_PPLX_API_KEY to your .env.local file to use AI features." 
