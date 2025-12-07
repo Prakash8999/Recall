@@ -1,48 +1,32 @@
+import Perplexity from '@perplexity-ai/perplexity_ai';
+
 export async function callAi(prompt: string, systemPrompt: string) {
   const apiKey = import.meta.env.VITE_PPLX_API_KEY;
   
-  console.log("[AI] Calling AI with prompt length:", prompt.length);
-
-  // If no API key is found, we can't call the real API.
-  // We'll throw a specific error that the UI can catch and show to the user.
   if (!apiKey) {
     console.error("[AI] Missing API Key");
     throw new Error("Missing API Key. Please set VITE_PPLX_API_KEY in .env.local");
   }
 
+  console.log("[AI] Initializing client with key ending in ...", apiKey.slice(-4));
+
   try {
-    const response = await fetch("https://api.perplexity.ai/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "sonar-pro",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: prompt },
-        ],
-        temperature: 0.1, // Lower temperature for more deterministic results
-      }),
+    // Initialize the client with the API key
+    const client = new Perplexity({ apiKey });
+
+    console.log("[AI] Sending request to Perplexity...");
+    const response = await client.chat.completions.create({
+      model: "sonar-pro",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: prompt },
+      ],
+      temperature: 0.1,
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("[AI] API Error:", response.status, errorText);
-      try {
-        const errorJson = JSON.parse(errorText);
-        throw new Error(errorJson.error?.message || "AI Service Error");
-      } catch {
-        throw new Error(`AI Service Error: ${response.statusText}`);
-      }
-    }
-
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content;
+    console.log("[AI] Response received");
+    const content = response.choices[0]?.message?.content;
     
-    console.log("[AI] Response received:", content?.substring(0, 50) + "...");
-
     if (!content) {
       throw new Error("No response received from AI");
     }

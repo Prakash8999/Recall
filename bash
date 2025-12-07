@@ -1,1 +1,1 @@
-rm -rf src/convex
+pnpm add @perplexity-ai/perplexity_ai

@@ -62,7 +62,7 @@ export function NewTaskModal({ open, onOpenChange }: NewTaskModalProps) {
     console.log("Improving description:", description);
     setIsAiLoading(true);
     try {
-      const systemPrompt = "You are a professional editor. Rewrite the input text to improve grammar, clarity, and professional tone. Return ONLY the improved text. Do NOT include any conversational filler, prefixes (like 'Improved:'), or suffixes (like 'Corrected for...'). Just the text.";
+      const systemPrompt = "You are a professional editor. Rewrite the input text to improve grammar, clarity, and professional tone. Return ONLY the improved text. Do NOT include any conversational filler, prefixes (like 'Improved:'), or suffixes. Do NOT repeat the input if it is already correct, just return the corrected version. Do NOT wrap in quotes.";
       const result = await callAi(description, systemPrompt);
       
       console.log("Raw AI result:", result);
@@ -71,13 +71,14 @@ export function NewTaskModal({ open, onOpenChange }: NewTaskModalProps) {
       let cleanedResult = result.trim();
       
       // Remove common prefixes
-      cleanedResult = cleanedResult.replace(/^Here is the improved text:\s*/i, "");
-      cleanedResult = cleanedResult.replace(/^\(Improved\)\s*/i, "");
-      cleanedResult = cleanedResult.replace(/^Improved:\s*/i, "");
+      cleanedResult = cleanedResult.replace(/^Here is the improved text:[\s\n]*/i, "");
+      cleanedResult = cleanedResult.replace(/^\(Improved\)[\s\n]*/i, "");
+      cleanedResult = cleanedResult.replace(/^Improved:[\s\n]*/i, "");
+      cleanedResult = cleanedResult.replace(/^Output:[\s\n]*/i, "");
       
       // Remove common suffixes (more aggressive)
-      cleanedResult = cleanedResult.replace(/\s*-\s*Corrected for grammar.*$/i, "");
-      cleanedResult = cleanedResult.replace(/\s*Note:.*$/i, "");
+      cleanedResult = cleanedResult.replace(/[\s\n]*- Corrected for grammar.*$/i, "");
+      cleanedResult = cleanedResult.replace(/[\s\n]*Note:.*$/i, "");
       
       // Remove quotes if the AI wrapped the whole thing in quotes
       if (cleanedResult.startsWith('"') && cleanedResult.endsWith('"')) {
