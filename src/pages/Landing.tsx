@@ -37,7 +37,7 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-background flex flex-col overflow-x-hidden selection:bg-primary/20">
       {/* Navbar */}
-      <nav className="px-6 py-4 flex items-center justify-between border-b bg-background/80 backdrop-blur-md sticky top-0 z-50">
+      <nav className="px-4 md:px-6 py-4 flex items-center justify-between border-b bg-background/80 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
           <div className="bg-primary text-primary-foreground p-1.5 rounded-lg shadow-sm">
             <LayoutDashboard className="w-5 h-5" />
@@ -56,7 +56,7 @@ export default function Landing() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-20 md:py-32 px-6 overflow-hidden">
+        <section className="relative py-20 md:py-32 px-4 md:px-6 overflow-hidden">
           <div className="absolute inset-0 -z-10">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-primary/10 rounded-full blur-3xl opacity-50" />
             <div className="absolute bottom-0 right-0 w-[800px] h-[600px] bg-blue-500/5 rounded-full blur-3xl opacity-30" />
@@ -73,14 +73,14 @@ export default function Landing() {
                 <span>v2.0 is now live</span>
               </motion.div>
               
-              <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-6 text-foreground">
+              <motion.h1 variants={itemVariants} className="text-4xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-6 text-foreground">
                 Master Your <br className="hidden md:block" />
                 <span className="bg-gradient-to-r from-primary via-blue-600 to-primary bg-clip-text text-transparent animate-gradient bg-300%">
                   Workflow
                 </span>
               </motion.h1>
               
-              <motion.p variants={itemVariants} className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
+              <motion.p variants={itemVariants} className="text-lg md:text-2xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
                 The minimalist Kanban board for personal productivity. 
                 Limit work in progress, focus on what matters, and get things done.
               </motion.p>

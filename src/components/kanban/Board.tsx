@@ -154,22 +154,22 @@ export function KanbanBoard({ tasks, selectedDate }: KanbanBoardProps) {
   return (
     <div className="h-full flex flex-col bg-muted/20">
       {/* Bulk Actions Toolbar */}
-      <div className="px-6 py-2 border-b bg-background/50 backdrop-blur-sm flex items-center gap-4 shrink-0">
-        <div className="flex items-center gap-2">
+      <div className="px-4 md:px-6 py-2 border-b bg-background/50 backdrop-blur-sm flex items-center gap-4 shrink-0 overflow-x-auto no-scrollbar">
+        <div className="flex items-center gap-2 shrink-0">
           <Checkbox 
             id="select-all"
             checked={filteredTasks.length > 0 && selectedTaskIds.size === filteredTasks.length}
             onCheckedChange={(checked) => handleSelectAll(checked as boolean)}
           />
-          <label htmlFor="select-all" className="text-sm font-medium cursor-pointer select-none">
+          <label htmlFor="select-all" className="text-sm font-medium cursor-pointer select-none whitespace-nowrap">
             Select All
           </label>
         </div>
         
         {selectedTaskIds.size > 0 && (
-          <div className="flex items-center gap-2 animate-in fade-in slide-in-from-left-5 duration-200">
+          <div className="flex items-center gap-2 animate-in fade-in slide-in-from-left-5 duration-200 shrink-0">
             <div className="h-4 w-px bg-border mx-2" />
-            <span className="text-sm text-muted-foreground">
+            <span className="text-sm text-muted-foreground whitespace-nowrap">
               {selectedTaskIds.size} selected
             </span>
             <Button 

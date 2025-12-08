@@ -54,17 +54,17 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="h-screen bg-background flex flex-col overflow-hidden relative selection:bg-primary/20">
+    <div className="h-[100dvh] bg-background flex flex-col overflow-hidden relative selection:bg-primary/20">
       {/* Background Pattern */}
       <div className="absolute inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] opacity-50" />
       
-      <header className="border-b bg-card/50 backdrop-blur-xl px-4 md:px-8 py-3 md:py-4 flex items-center justify-between shrink-0 z-10">
-        <div className="flex items-center gap-3">
-          <div className="bg-gradient-to-br from-primary to-blue-600 p-2 rounded-xl shadow-lg shadow-primary/20">
-            <LayoutDashboard className="w-5 h-5 md:w-6 md:h-6 text-white" />
+      <header className="border-b bg-card/50 backdrop-blur-xl px-3 md:px-8 py-3 md:py-4 flex items-center justify-between shrink-0 z-10">
+        <div className="flex items-center gap-2 md:gap-3">
+          <div className="bg-gradient-to-br from-primary to-blue-600 p-1.5 md:p-2 rounded-xl shadow-lg shadow-primary/20">
+            <LayoutDashboard className="w-4 h-4 md:w-6 md:h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-lg md:text-xl font-bold tracking-tight flex items-center gap-2">
+            <h1 className="text-base md:text-xl font-bold tracking-tight flex items-center gap-2">
               FocusBoard <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium border border-primary/20">PRO</span>
             </h1>
           </div>
@@ -76,12 +76,13 @@ export default function Dashboard() {
               <Button
                 variant={"outline"}
                 className={cn(
-                  "w-[140px] md:w-[240px] justify-start text-left font-normal h-9 md:h-10 text-xs md:text-sm shadow-sm",
+                  "w-auto md:w-[240px] justify-start text-left font-normal h-9 md:h-10 text-xs md:text-sm shadow-sm px-2.5 md:px-4",
                   !date && "text-muted-foreground"
                 )}
               >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "PPP") : <span>Pick a date</span>}
+                <CalendarIcon className="mr-2 h-3.5 w-3.5 md:h-4 md:w-4" />
+                <span className="hidden md:inline">{date ? format(date, "PPP") : <span>Pick a date</span>}</span>
+                <span className="md:hidden">{date ? format(date, "MMM d") : <span>Date</span>}</span>
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="end">
@@ -97,7 +98,7 @@ export default function Dashboard() {
 
           <Button 
             onClick={() => setIsNewTaskOpen(true)} 
-            className="gap-2 h-9 md:h-10 text-xs md:text-sm rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all hover:scale-105"
+            className="gap-2 h-9 md:h-10 text-xs md:text-sm rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all hover:scale-105 px-3 md:px-4"
           >
             <Plus className="w-4 h-4" />
             <span className="hidden md:inline">New Task</span>

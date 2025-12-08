@@ -118,7 +118,7 @@ export function TaskCard({ task, onDragStart, isSelected, onToggleSelection }: T
       >
         <div className={cn(
           "absolute top-2 left-2 z-20 transition-opacity duration-200",
-          isSelected ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+          isSelected ? "opacity-100" : "opacity-100 md:opacity-0 md:group-hover:opacity-100"
         )}>
           <Checkbox 
             checked={isSelected}
