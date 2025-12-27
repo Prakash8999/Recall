@@ -1,26 +1,52 @@
-
-name: Node.js CI
+name: Node.js CI/CD Pipeline
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
+  # JOB 1: THE FACTORY (CI)
   build:
-
     runs-on: ubuntu-latest
-
+    
     strategy:
       matrix:
         node-version: [20.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4          # 1. Get the code
+    
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v4        # 2. Install Node.js
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
+        
+    - run: npm ci                        # 3. Clean Install dependencies
+    
+    # - run: npm run test                  # 4. Run Tests (Fail Fast!)
+    
+    - run: npm run build --if-present    # 5. Build the app (creates 'dist' folder)
+
+    - name: Upload Build Artifact        # 6. Save 'dist' to the Locker
+      uses: actions/upload-artifact@v4
+      with:
+        name: my-build-files
+        path: dist
+
+  # JOB 2: THE DELIVERY TRUCK (CD)
+  deploy:
+    needs: build                         # <--- WAIT for 'build' to finish!
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Download the artifact        # 1. Get 'dist' from the Locker
+      uses: actions/download-artifact@v4
+      with:
+        name: my-build-files             # Must match the upload name!
+        path: dist
+        
+    - name: Deploy to Production         # 2. Simulate Deployment
+      run: |
+        echo "Deploying to production server..."
+        ls -R dist                       # Show files to prove they arrived
