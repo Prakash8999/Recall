@@ -33,20 +33,36 @@ jobs:
       with:
         name: my-build-files
         path: dist
-
-  # JOB 2: THE DELIVERY TRUCK (CD)
+    # JOB 2: THE DELIVERY TRUCK (CD)
   deploy:
-    needs: build                         # <--- WAIT for 'build' to finish!
+    needs: build
     runs-on: ubuntu-latest
     
     steps:
-    - name: Download the artifact        # 1. Get 'dist' from the Locker
+    - name: Download the artifact
       uses: actions/download-artifact@v4
       with:
-        name: my-build-files             # Must match the upload name!
-        path: dist
-        
-    - name: Deploy to Production         # 2. Simulate Deployment
-      run: |
-        echo "Deploying to production server..."
-        ls -R dist                       # Show files to prove they arrived
+        name: my-build-files
+        path: dist  # Unpack the zip into a local 'dist' folder
+
+    # STEP A: COPY FILES TO EC2 🚚
+    - name: Copy files via SSH
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        source: "dist/*"            # Take everything inside the local 'dist' folder...
+        target: "/home/ubuntu/project/focusboard-pro" # ...and put it into this folder on EC2. UPDATE THIS PATH!
+
+    # STEP B: RESTART PM2 🔄
+    - name: Restart PM2
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          pm2 reload all    # Or use the specific app name: pm2 reload my-app
+          echo "Deployment successful!"
+  
