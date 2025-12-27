@@ -25,7 +25,7 @@ export function KanbanBoard({ tasks, selectedDate }: KanbanBoardProps) {
   // Filter tasks based on selected date
   const filteredTasks = tasks.filter((task) => {
     const isToday = isSameDay(selectedDate, new Date());
-    
+
     if (task.status === "done") {
       return task.completedAt ? isSameDay(new Date(task.completedAt), selectedDate) : false;
     } else {
@@ -62,7 +62,7 @@ export function KanbanBoard({ tasks, selectedDate }: KanbanBoardProps) {
         batch.delete(taskRef);
       });
       await batch.commit();
-      
+
       toast.success(`Deleted ${selectedTaskIds.size} tasks`);
       setSelectedTaskIds(new Set());
     } catch (error: any) {
@@ -103,7 +103,7 @@ export function KanbanBoard({ tasks, selectedDate }: KanbanBoardProps) {
         updates.completedAt = Date.now();
       }
       await updateDoc(taskRef, updates);
-      
+
       if (newStatus === "done") {
         toast.success("Task Completed!", {
           description: "Great job! Keep up the momentum.",
@@ -154,25 +154,25 @@ export function KanbanBoard({ tasks, selectedDate }: KanbanBoardProps) {
       {/* Bulk Actions Toolbar */}
       <div className="px-4 md:px-6 py-2 border-b bg-background/50 backdrop-blur-sm flex items-center gap-4 shrink-0 overflow-x-auto no-scrollbar">
         <div className="flex items-center gap-2 shrink-0">
-          <Checkbox 
+          <Checkbox
             id="select-all"
             checked={filteredTasks.length > 0 && selectedTaskIds.size === filteredTasks.length}
             onCheckedChange={(checked) => handleSelectAll(checked as boolean)}
           />
           <label htmlFor="select-all" className="text-sm font-medium cursor-pointer select-none whitespace-nowrap">
-            Select All
+            Select All New
           </label>
         </div>
-        
+
         {selectedTaskIds.size > 0 && (
           <div className="flex items-center gap-2 animate-in fade-in slide-in-from-left-5 duration-200 shrink-0">
             <div className="h-4 w-px bg-border mx-2" />
             <span className="text-sm text-muted-foreground whitespace-nowrap">
               {selectedTaskIds.size} selected
             </span>
-            <Button 
-              variant="destructive" 
-              size="sm" 
+            <Button
+              variant="destructive"
+              size="sm"
               className="h-8 gap-2"
               onClick={handleDeleteSelected}
             >
@@ -201,8 +201,8 @@ export function KanbanBoard({ tasks, selectedDate }: KanbanBoardProps) {
             </div>
           ))}
         </div>
-        <BlockTaskModal 
-          open={blockModalOpen} 
+        <BlockTaskModal
+          open={blockModalOpen}
           onOpenChange={setBlockModalOpen}
           onConfirm={handleBlockConfirm}
         />
