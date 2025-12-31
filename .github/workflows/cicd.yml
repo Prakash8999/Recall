@@ -1,14 +1,9 @@
-# ============================
-# WORKFLOW IDENTIFICATION
-# ============================
 # This is just a human-readable name for the workflow.
 # It helps identify this pipeline in the GitHub Actions UI.
 # Changing this name does NOT affect execution or logic in any way.
 name: Node.js CI/CD
 
-# ============================
-# WORKFLOW TRIGGER
-# ============================
+# Workflow Trigger
 # This section defines WHEN the pipeline should run.
 # In this case, the workflow is triggered automatically
 # whenever code is pushed to the main branch.
@@ -18,9 +13,7 @@ on:
     branches: ["main"]
 
 jobs:
-  # ============================
-  # BUILD JOB (CONTINUOUS INTEGRATION)
-  # ============================
+  # Build Job (Continuous Integration)
   build:
     # This specifies the runner for the build job.
     # GitHub spins up a fresh Ubuntu virtual machine for this job.
@@ -64,9 +57,7 @@ jobs:
           name: build-files
           path: dist
 
-  # ============================
-  # DEPLOY JOB (CONTINUOUS DELIVERY)
-  # ============================
+  # DEPLOY JOB (Continuous Deployment)
   deploy:
     # This job will only run if the build job succeeds.
     # If build fails, deployment will never start.
