@@ -1,4 +1,4 @@
-import { Doc, Id } from "@/convex/_generated/dataModel";
+
 import { TaskCard } from "./TaskCard";
 import { TaskStatus } from "./Board";
 import { cn } from "@/lib/utils";
@@ -9,20 +9,20 @@ interface KanbanColumnProps {
   id: TaskStatus;
   label: string;
   color: string;
-  tasks: Doc<"tasks">[];
-  onDragStart: (taskId: Id<"tasks">) => void;
+  tasks: any[];
+  onDragStart: (taskId: string) => void;
   onDrop: () => void;
   selectedTaskIds: Set<string>;
   onToggleSelection: (taskId: string) => void;
   onStatusChange: (taskId: string, newStatus: TaskStatus) => void;
 }
 
-export function KanbanColumn({ 
-  id, 
-  label, 
-  color, 
-  tasks, 
-  onDragStart, 
+export function KanbanColumn({
+  id,
+  label,
+  color,
+  tasks,
+  onDragStart,
   onDrop,
   selectedTaskIds,
   onToggleSelection,
@@ -60,7 +60,7 @@ export function KanbanColumn({
         id === "done" && "border-green-100 dark:border-green-900/50 bg-green-50/30 dark:bg-green-900/10"
       )}>
         <div className="flex items-center gap-3">
-          <div className={cn("w-3 h-3 rounded-full ring-2 ring-offset-2 ring-offset-card", 
+          <div className={cn("w-3 h-3 rounded-full ring-2 ring-offset-2 ring-offset-card",
             id === "todo" && "bg-slate-400 ring-slate-200 dark:ring-slate-800",
             id === "in_progress" && "bg-blue-500 ring-blue-200 dark:ring-blue-900",
             id === "blocked" && "bg-red-500 ring-red-200 dark:ring-red-900",
@@ -77,13 +77,13 @@ export function KanbanColumn({
           {tasks.length}
         </span>
       </div>
-      
+
       <div className="flex-1 min-h-0 p-2 space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-muted-foreground/10 hover:scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent">
         {tasks.map((task) => (
-          <TaskCard 
-            key={task._id} 
-            task={task} 
-            onDragStart={onDragStart} 
+          <TaskCard
+            key={task._id}
+            task={task}
+            onDragStart={onDragStart}
             isSelected={selectedTaskIds.has(task._id)}
             onToggleSelection={() => onToggleSelection(task._id)}
             onStatusChange={onStatusChange}

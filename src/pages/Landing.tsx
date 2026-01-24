@@ -74,19 +74,19 @@ export default function Landing() {
                 <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
                 <span>v2.0 is now live</span>
               </motion.div>
-              
+
               <motion.h1 variants={itemVariants} className="text-4xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-6 text-foreground">
                 Master Your <br className="hidden md:block" />
                 <span className="bg-gradient-to-r from-primary via-blue-600 to-primary bg-clip-text text-transparent animate-gradient bg-300%">
                   Workflow
                 </span>
               </motion.h1>
-              
+
               <motion.p variants={itemVariants} className="text-lg md:text-2xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
-                The minimalist Kanban board for personal productivity. 
+                The minimalist Kanban board for personal productivity.
                 Limit work in progress, focus on what matters, and get things done.
               </motion.p>
-              
+
               <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Button size="lg" className="h-14 px-8 text-lg rounded-full w-full sm:w-auto shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all hover:scale-105" onClick={handleGetStarted}>
                   Start for Free <ArrowRight className="ml-2 w-5 h-5" />
@@ -98,7 +98,7 @@ export default function Landing() {
             </motion.div>
 
             {/* Visual Preview */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 60, rotateX: 20 }}
               animate={{ opacity: 1, y: 0, rotateX: 0 }}
               transition={{ delay: 0.4, duration: 0.8, type: "spring" }}
@@ -143,34 +143,34 @@ export default function Landing() {
                 Powerful features to help you manage your tasks without the clutter.
               </p>
             </div>
-            
+
             <div className="grid md:grid-cols-3 gap-8">
-              <FeatureCard 
+              <FeatureCard
                 icon={<Zap className="w-6 h-6 text-yellow-500" />}
                 title="Focus Mode"
                 description="Strict WIP limits prevent overwhelm. Only 2 tasks in progress at a time to ensure you finish what you start."
               />
-              <FeatureCard 
+              <FeatureCard
                 icon={<BarChart3 className="w-6 h-6 text-indigo-500" />}
                 title="Visual Progress"
                 description="Get that dopamine hit when you drag a task to Done. Track your wins and see your productivity soar."
               />
-              <FeatureCard 
+              <FeatureCard
                 icon={<Shield className="w-6 h-6 text-blue-500" />}
                 title="Blocker Management"
                 description="Track what's blocking you. Add reasons, get AI tips to unblock, and clear the path to success."
               />
-              <FeatureCard 
+              <FeatureCard
                 icon={<Users className="w-6 h-6 text-purple-500" />}
                 title="Personal Board"
                 description="Your private space. No distractions, no noise. Just you and your tasks."
               />
-              <FeatureCard 
+              <FeatureCard
                 icon={<CheckCircle2 className="w-6 h-6 text-green-500" />}
                 title="AI Powered"
                 description="Let AI break down complex tasks, write descriptions, and help you get unstuck."
               />
-              <FeatureCard 
+              <FeatureCard
                 icon={<LayoutDashboard className="w-6 h-6 text-pink-500" />}
                 title="Modern Interface"
                 description="A beautiful, responsive interface that works on all your devices. Dark mode included."
@@ -205,7 +205,7 @@ export default function Landing() {
             <span className="font-bold text-lg">FocusBoard</span>
           </div>
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} FocusBoard. Built with Convex & React.
+            © {new Date().getFullYear()} FocusBoard. Built with Firebase & React.
           </p>
           <div className="flex gap-6 text-sm text-muted-foreground">
             <a href="#" className="hover:text-foreground transition-colors">Privacy</a>
@@ -214,7 +214,7 @@ export default function Landing() {
           </div>
         </div>
       </footer>
-      
+
       <AuthModal open={isAuthModalOpen} onOpenChange={setIsAuthModalOpen} />
     </div>
   );
@@ -222,7 +222,7 @@ export default function Landing() {
 
 function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
   return (
-    <motion.div 
+    <motion.div
       whileHover={{ y: -5 }}
       className="bg-card p-8 rounded-2xl border shadow-sm hover:shadow-xl transition-all duration-300 group"
     >
