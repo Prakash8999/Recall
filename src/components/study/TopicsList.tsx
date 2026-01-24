@@ -38,14 +38,11 @@ export function TopicsList({ onTopicSelect, onNewTopic }: TopicsListProps) {
         return () => unsubscribe();
     }, [user?._id]);
 
-    // Client-side search (simple but effective for personal use)
+    // Client-side search - only search in title (content is OutputData object)
     const filteredTopics = topics.filter((topic) => {
         if (!searchQuery.trim()) return true;
         const query = searchQuery.toLowerCase();
-        return (
-            topic.title.toLowerCase().includes(query) ||
-            topic.content.toLowerCase().includes(query)
-        );
+        return topic.title.toLowerCase().includes(query);
     });
 
     return (
@@ -64,7 +61,7 @@ export function TopicsList({ onTopicSelect, onNewTopic }: TopicsListProps) {
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input
-                        placeholder="Search topics by title or content..."
+                        placeholder="Search topics by title..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="pl-10"
@@ -96,7 +93,7 @@ export function TopicsList({ onTopicSelect, onNewTopic }: TopicsListProps) {
                             >
                                 <h3 className="font-medium mb-1 line-clamp-1">{topic.title}</h3>
                                 <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
-                                    {topic.content || "No content"}
+                                    {typeof topic.content === 'string' ? topic.content : "Click to view content"}
                                 </p>
                                 <div className="flex items-center gap-4 text-xs text-muted-foreground">
                                     <div className="flex items-center gap-1">
