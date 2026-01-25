@@ -82,7 +82,7 @@ export function ImageUploader({ onImageUploaded }: ImageUploaderProps) {
 
 interface ImagePreviewProps {
     url: string;
-    onRemove: () => void;
+    onRemove?: () => void;
 }
 
 export function ImagePreview({ url, onRemove }: ImagePreviewProps) {
@@ -95,13 +95,15 @@ export function ImagePreview({ url, onRemove }: ImagePreviewProps) {
                 style={{ maxHeight: '400px' }}
                 loading="lazy"
             />
-            <button
-                onClick={onRemove}
-                className="absolute top-2 right-2 p-1 bg-destructive text-destructive-foreground rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                type="button"
-            >
-                <X className="w-4 h-4" />
-            </button>
+            {onRemove && (
+                <button
+                    onClick={onRemove}
+                    className="absolute top-2 right-2 p-1 bg-destructive text-destructive-foreground rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    type="button"
+                >
+                    <X className="w-4 h-4" />
+                </button>
+            )}
         </div>
     );
 }

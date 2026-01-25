@@ -11,9 +11,10 @@ interface LinkedTasksPanelProps {
     topicId?: string;
     linkedTaskIds: string[];
     onTasksLinked: (taskIds: string[]) => void;
+    readOnly?: boolean;
 }
 
-export function LinkedTasksPanel({ topicId, linkedTaskIds, onTasksLinked }: LinkedTasksPanelProps) {
+export function LinkedTasksPanel({ topicId, linkedTaskIds, onTasksLinked, readOnly = false }: LinkedTasksPanelProps) {
     const { user } = useAuth();
     const [allTasks, setAllTasks] = useState<any[]>([]);
     const [showTaskPicker, setShowTaskPicker] = useState(false);
@@ -78,15 +79,17 @@ export function LinkedTasksPanel({ topicId, linkedTaskIds, onTasksLinked }: Link
                     <Link2 className="w-4 h-4" />
                     Linked Kanban Tasks
                 </h3>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setShowTaskPicker(!showTaskPicker)}
-                    className="gap-2"
-                >
-                    <Plus className="w-3 h-3" />
-                    Link Task
-                </Button>
+                {!readOnly && (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowTaskPicker(!showTaskPicker)}
+                        className="gap-2"
+                    >
+                        <Plus className="w-3 h-3" />
+                        Link Task
+                    </Button>
+                )}
             </div>
 
             {/* Linked Tasks */}
@@ -103,14 +106,16 @@ export function LinkedTasksPanel({ topicId, linkedTaskIds, onTasksLinked }: Link
                                     Status: {task.status.replace("_", " ")}
                                 </p>
                             </div>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => handleRemoveTask(task._id)}
-                                className="h-8 w-8 p-0"
-                            >
-                                <X className="w-4 h-4" />
-                            </Button>
+                            {!readOnly && (
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleRemoveTask(task._id)}
+                                    className="h-8 w-8 p-0"
+                                >
+                                    <X className="w-4 h-4" />
+                                </Button>
+                            )}
                         </div>
                     ))}
                 </div>

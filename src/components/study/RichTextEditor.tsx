@@ -15,9 +15,10 @@ interface RichTextEditorProps {
     data?: OutputData;
     onChange?: (data: OutputData) => void;
     placeholder?: string;
+    readOnly?: boolean;
 }
 
-export const RichTextEditor = memo(({ data, onChange, placeholder }: RichTextEditorProps) => {
+export const RichTextEditor = memo(({ data, onChange, placeholder, readOnly = false }: RichTextEditorProps) => {
     const editorRef = useRef<EditorJS | null>(null);
     const holderRef = useRef<HTMLDivElement>(null);
     const isInitialized = useRef(false);
@@ -30,8 +31,9 @@ export const RichTextEditor = memo(({ data, onChange, placeholder }: RichTextEdi
             holder: holderRef.current,
             placeholder: placeholder || "Start writing your notes...",
             data: data,
+            readOnly: readOnly,
             onChange: async () => {
-                if (onChange && editorRef.current) {
+                if (onChange && editorRef.current && !readOnly) {
                     const outputData = await editorRef.current.save();
                     onChange(outputData);
                 }

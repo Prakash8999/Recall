@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Save, Loader2, ArrowLeft } from "lucide-react";
+import { Save, Loader2, ArrowLeft, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RichTextEditor } from "./RichTextEditor";
@@ -31,6 +31,7 @@ export function TopicEditor({ topicId, initialTopic, onSave, onBack }: TopicEdit
     const [linkedTaskIds, setLinkedTaskIds] = useState<string[]>(initialTopic?.linkedTaskIds || []);
     const [saving, setSaving] = useState(false);
     const [hasChanges, setHasChanges] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(!topicId); // Edit mode by default for new topics
 
     useEffect(() => {
         if (initialTopic) {
@@ -45,8 +46,15 @@ export function TopicEditor({ topicId, initialTopic, onSave, onBack }: TopicEdit
     }, [initialTopic]);
 
     useEffect(() => {
-        setHasChanges(true);
-    }, [title, content, images, linkedTaskIds]);
+        if (isEditMode) {
+            setHasChanges(true);
+        }
+    }, [title, content, images, linkedTaskIds, isEditMode]);
+
+    const handleEdit = () => {
+        setIsEditMode(true);
+        setHasChanges(false);
+    };
 
     const handleSave = async () => {
         if (!user?._id) return;
@@ -82,6 +90,7 @@ export function TopicEditor({ topicId, initialTopic, onSave, onBack }: TopicEdit
             }
 
             setHasChanges(false);
+            setIsEditMode(false); // Exit edit mode after saving
             onSave?.();
         } catch (error: any) {
             toast.error("Failed to save topic", { description: error.message });
@@ -123,24 +132,37 @@ export function TopicEditor({ topicId, initialTopic, onSave, onBack }: TopicEdit
                         {topicId ? "Edit Topic" : "New Topic"}
                     </h2>
                 </div>
-                <Button
-                    onClick={handleSave}
-                    disabled={saving || !hasChanges}
-                    size="sm"
-                    className="gap-2"
-                >
-                    {saving ? (
-                        <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            Saving...
-                        </>
-                    ) : (
-                        <>
-                            <Save className="w-4 h-4" />
-                            Save
-                        </>
-                    )}
-                </Button>
+
+                {isEditMode ? (
+                    <Button
+                        onClick={handleSave}
+                        disabled={saving || !hasChanges}
+                        size="sm"
+                        className="gap-2"
+                    >
+                        {saving ? (
+                            <>
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                                Saving...
+                            </>
+                        ) : (
+                            <>
+                                <Save className="w-4 h-4" />
+                                Save
+                            </>
+                        )}
+                    </Button>
+                ) : (
+                    <Button
+                        onClick={handleEdit}
+                        size="sm"
+                        variant="outline"
+                        className="gap-2"
+                    >
+                        <Edit className="w-4 h-4" />
+                        Edit
+                    </Button>
+                )}
             </div>
 
             {/* Content */}
@@ -153,6 +175,8 @@ export function TopicEditor({ topicId, initialTopic, onSave, onBack }: TopicEdit
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             className="text-xl md:text-2xl font-bold border-0 px-0 focus-visible:ring-0"
+                            readOnly={!isEditMode}
+                            disabled={!isEditMode}
                         />
                     </div>
 
@@ -162,6 +186,7 @@ export function TopicEditor({ topicId, initialTopic, onSave, onBack }: TopicEdit
                             data={content}
                             onChange={setContent}
                             placeholder="Write your notes here... Use the toolbar to format text, add code blocks, lists, and more."
+                            readOnly={!isEditMode}
                         />
                     </div>
 
@@ -170,7 +195,7 @@ export function TopicEditor({ topicId, initialTopic, onSave, onBack }: TopicEdit
                     <div className="space-y-4">
                         <div className="flex items-center justify-between">
                             <h3 className="text-sm font-medium text-muted-foreground">Images</h3>
-                            <ImageUploader onImageUploaded={handleImageUploaded} />
+                            {isEditMode && <ImageUploader onImageUploaded={handleImageUploaded} />}
                         </div>
 
                         {images.length > 0 && (
@@ -179,7 +204,7 @@ export function TopicEditor({ topicId, initialTopic, onSave, onBack }: TopicEdit
                                     <ImagePreview
                                         key={index}
                                         url={url}
-                                        onRemove={() => handleRemoveImage(index)}
+                                        onRemove={isEditMode ? () => handleRemoveImage(index) : undefined}
                                     />
                                 ))}
                             </div>
@@ -192,6 +217,7 @@ export function TopicEditor({ topicId, initialTopic, onSave, onBack }: TopicEdit
                             topicId={topicId}
                             linkedTaskIds={linkedTaskIds}
                             onTasksLinked={handleTasksLinked}
+                            readOnly={!isEditMode}
                         />
                     </div>
                 </div>
