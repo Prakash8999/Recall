@@ -113,6 +113,13 @@ export const RichTextEditor = memo(({ data, onChange, placeholder, readOnly = fa
         };
     }, []);
 
+    // Handle readOnly updates
+    useEffect(() => {
+        if (editorRef.current && editorRef.current.readOnly && isInitialized.current) {
+            editorRef.current.readOnly.toggle(readOnly);
+        }
+    }, [readOnly]);
+
     return (
         <div className="rich-text-editor">
             <div ref={holderRef} className="prose prose-sm max-w-none dark:prose-invert" />
